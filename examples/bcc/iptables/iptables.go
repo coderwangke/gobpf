@@ -19,7 +19,7 @@ const source string = `
 #include <linux/netfilter/x_tables.h>
 
 typedef struct {
-    u64 ts;
+	u32 pid;
 	int ret;
 } route_evt_t;
 
@@ -67,7 +67,7 @@ static inline int __ipt_do_table_out(struct pt_regs * ctx)
 
 	// Built event for userland
     route_evt_t evt = {
-		.ts = bpf_ktime_get_ns(),
+		.pid = pid,
 		.ret = ret,
 	};
 
@@ -94,7 +94,7 @@ int kretprobe__ipt_do_table(struct pt_regs *ctx)
 `
 
 type iptableEvent struct {
-	Ts          uint64
+	Pid         uint32
 	ReturnValue int32
 }
 
@@ -124,7 +124,7 @@ func main() {
 				fmt.Printf("failed to decode received data: %s\n", err)
 				continue
 			}
-			fmt.Printf("Time %d (return value: %d)\n", event.Ts, event.ReturnValue)
+			fmt.Printf("Time %d (return value: %d)\n", event.Pid, event.ReturnValue)
 		}
 	}()
 
