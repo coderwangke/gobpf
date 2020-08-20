@@ -102,6 +102,34 @@ func main() {
 	m := bpf.NewModule(source, []string{})
 	defer m.Close()
 
+	chownKprobe, err := m.LoadKprobe("kprobe__ipt_do_table")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Failed to load kprobe__sys_fchownat: %s\n", err)
+		os.Exit(1)
+	}
+
+	// passing -1 for maxActive signifies to use the default
+	// according to the kernel kprobes documentation
+	err = m.AttachKprobe("ipt_do_table", chownKprobe, -1)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Failed to attach kprobe__sys_fchownat: %s\n", err)
+		os.Exit(1)
+	}
+
+	chownKretprobe, err := m.LoadKprobe("kretprobe__ipt_do_table")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Failed to load kretprobe__sys_fchownat: %s\n", err)
+		os.Exit(1)
+	}
+
+	// passing -1 for maxActive signifies to use the default
+	// according to the kernel kretprobes documentation
+	err = m.AttachKretprobe("ipt_do_table", chownKretprobe, -1)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Failed to attach kretprobe__sys_fchownat: %s\n", err)
+		os.Exit(1)
+	}
+
 	table := bpf.NewTable(m.TableId("route_evt"), m)
 
 	channel := make(chan []byte)
