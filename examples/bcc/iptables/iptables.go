@@ -38,7 +38,7 @@ BPF_HASH(cur_ipt_do_table_args, u32, struct ipt_do_table_args);
 /**
  * Common iptables functions
  */
-static inline int __ipt_do_table_in(struct pt_regs *ctx, struct sk_buff *skb, const struct nf_hook_state *state, struct xt_table *table)
+static int __ipt_do_table_in(struct pt_regs *ctx, struct sk_buff *skb, const struct nf_hook_state *state, struct xt_table *table)
 {
     u32 pid = bpf_get_current_pid_tgid();
 
@@ -52,7 +52,7 @@ static inline int __ipt_do_table_in(struct pt_regs *ctx, struct sk_buff *skb, co
     return 0;
 };
 
-static inline int __ipt_do_table_out(struct pt_regs * ctx)
+static int __ipt_do_table_out(struct pt_regs * ctx)
 {
     // Load arguments
 	int ret = PT_REGS_RC(ctx);
@@ -118,7 +118,6 @@ func main() {
 	go func() {
 		var event iptableEvent
 		for {
-			fmt.Println("for test\n")
 			data := <-channel
 			err := binary.Read(bytes.NewBuffer(data), binary.LittleEndian, &event)
 			if err != nil {
