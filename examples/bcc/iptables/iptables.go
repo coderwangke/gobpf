@@ -66,9 +66,10 @@ static inline int __ipt_do_table_out(struct pt_regs * ctx)
     cur_ipt_do_table_args.delete(&pid);
 
 	// Built event for userland
-    struct route_evt_t evt = {};
-	evt.ts = bpf_ktime_get_ns();
-	evt.ret = ret
+    struct route_evt_t evt = {
+		.ts = bpf_ktime_get_ns();
+		.ret = ret
+	};
 
     // Send event
     route_evt.perf_submit(ctx, &evt, sizeof(evt));
