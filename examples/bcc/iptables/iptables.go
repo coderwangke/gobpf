@@ -90,7 +90,7 @@ int kprobe__ipt_do_table(struct pt_regs *ctx, struct sk_buff *skb, const struct 
 int kretprobe__ipt_do_table(struct pt_regs *ctx)
 {
     return __ipt_do_table_out(ctx);
-};
+}
 `
 
 type iptableEvent struct {
