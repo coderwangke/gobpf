@@ -66,7 +66,7 @@ static inline int __ipt_do_table_out(struct pt_regs * ctx)
     cur_ipt_do_table_args.delete(&pid);
 
 	// Built event for userland
-    struct route_evt_t evt = {
+    route_evt_t evt = {
 		.ts = bpf_ktime_get_ns(),
 		.ret = ret,
 	};
