@@ -104,7 +104,7 @@ func main() {
 
 	chownKprobe, err := m.LoadKprobe("kprobe__ipt_do_table")
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to load kprobe__sys_fchownat: %s\n", err)
+		fmt.Fprintf(os.Stderr, "Failed to load kprobe__ipt_do_table: %s\n", err)
 		os.Exit(1)
 	}
 
@@ -114,13 +114,13 @@ func main() {
 	// according to the kernel kprobes documentation
 	err = m.AttachKprobe(syscallName, chownKprobe, -1)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to attach kprobe__sys_fchownat: %s\n", err)
+		fmt.Fprintf(os.Stderr, "Failed to attach kprobe__ipt_do_table: %s\n", err)
 		os.Exit(1)
 	}
 
 	chownKretprobe, err := m.LoadKprobe("kretprobe__ipt_do_table")
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to load kretprobe__sys_fchownat: %s\n", err)
+		fmt.Fprintf(os.Stderr, "Failed to load kretprobe__ipt_do_table: %s\n", err)
 		os.Exit(1)
 	}
 
@@ -128,7 +128,7 @@ func main() {
 	// according to the kernel kretprobes documentation
 	err = m.AttachKretprobe(syscallName, chownKretprobe, -1)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to attach kretprobe__sys_fchownat: %s\n", err)
+		fmt.Fprintf(os.Stderr, "Failed to attach kretprobe__ipt_do_table: %s\n", err)
 		os.Exit(1)
 	}
 
