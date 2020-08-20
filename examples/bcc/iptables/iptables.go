@@ -118,6 +118,7 @@ func main() {
 	go func() {
 		var event iptableEvent
 		for {
+			fmt.Println("for test\n")
 			data := <-channel
 			err := binary.Read(bytes.NewBuffer(data), binary.LittleEndian, &event)
 			if err != nil {
